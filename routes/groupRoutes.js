@@ -65,7 +65,7 @@ router.post('/', upload.single('image'), async (req, res) => {
     });
 
     await newGroup.save();
-    res.redirect('/home'); // بعد الحفظ، يعيد التوجيه للصفحة الرئيسية
+    res.redirect('/home/S3766@'); // بعد الحفظ، يعيد التوجيه للصفحة الرئيسية
   } catch (err) {
     // console.error(err);
     res.status(500).send('حدث خطأ أثناء حفظ المجموعة');
@@ -91,7 +91,7 @@ router.post('/edit/:id', async (req, res) => {
   try {
     const { name, description, link, image } = req.body;
     await Group.findByIdAndUpdate(req.params.id, { name, description, link, image });
-    res.redirect('/home');
+    res.redirect('/home/S3766@');
   } catch (err) {
     // console.log(err);
     res.status(500).send('خطأ في التعديل');
@@ -102,7 +102,7 @@ router.post('/edit/:id', async (req, res) => {
 router.post('/delete/:id', async (req, res) => {
   try {
     await Group.findByIdAndDelete(req.params.id);
-    res.redirect('/home');
+    res.redirect('/home/S3766@');
   } catch (err) {
     // console.log(err);
     res.status(500).send('خطأ في الحذف');
