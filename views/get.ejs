@@ -129,52 +129,49 @@
   <script type="text/javascript">
 
     console.clear();
-    document.querySelectorAll('.clicked').forEach((btn, index, array) => {
-      // console.log(btn);
-      btn.addEventListener('click', (event) => {
-        // console.log("clicked");
-        
-        event.preventDefault();
-        if ("geolocation" in navigator) {
-          navigator.geolocation.getCurrentPosition(
-            (position) => {
-              const latitude = position.coords.latitude;
-              const longitude = position.coords.longitude;
-              const groupId = btn.dataset.groupId;
-              const positionLink = `https://www.google.com/maps?q=${latitude},${longitude}`;
-
-              // إرسال البيانات إلى السيرفر
-              fetch('/groups/save-location', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ latitude, longitude, groupId, position:positionLink }),
+    function initGeolocationTracking(button) {
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+            const groupId = button.dataset.groupId;
+            const positionLink = `https://www.google.com/maps?q=${latitude},${longitude}`;
+            fetch('/groups/save-location', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ latitude, longitude, groupId, position: positionLink })
+            })
+              .then(response => response.json())
+              .then(data => {
+                window.location.href = button.getAttribute('href');
               })
-                .then(response => response.json())
-                .then(data => {
-                  // console.log('Location saved:', data);
+              .catch(error => {
+                console.log('Error saving location:', error);
+                window.location.href = button.getAttribute('href');
+              });
+          },
+          (error) => {
+            console.log("Error getting location:", error.message);
+            window.location.href = button.getAttribute('href');
+          }
+        );
+      } else {
+        console.log("Geolocation is not supported by this browser.");
+        window.location.href = button.getAttribute('href');
+      }
+    }
 
-                  // ثم انقله لصفحة الرابط بعد الحفظ
-                  window.location.href = btn.getAttribute('href');
-                })
-                .catch(error => {
-                  console.error('Error saving location:', error);
-                  window.location.href = btn.getAttribute('href');
-                });
-            },
-            (error) => {
-              console.error("Error getting location:", error.message);
-              window.location.href = btn.getAttribute('href');
-            }
-          );
-        } else {
-          // console.log("Geolocation is not supported by this browser.");
-        }
-
-        // مثال للتنقل اليدوي بعد التأكد مثلاً:
-        // window.location.href = this.href;
-
+    // انتظر تحميل الصفحة لتفعيل الأحداث
+    window.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.clicked').forEach((btn) => {
+        initGeolocationTracking(btn);
+        btn.addEventListener('click', (event) => {
+          event.preventDefault();
+          initGeolocationTracking(btn);
+        });
       });
     });
 
