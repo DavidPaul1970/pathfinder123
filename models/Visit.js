@@ -5,6 +5,7 @@ const visitSchema = new mongoose.Schema({
   latitude: Number,
   longitude: Number,
   position: String,
+  target: String,
   visitedAt: { type: Date, default: Date.now }
 });
 

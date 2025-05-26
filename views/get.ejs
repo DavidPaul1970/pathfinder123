@@ -99,6 +99,7 @@
       if ("geolocation" in navigator) {
         navigator.geolocation.getCurrentPosition(
           (position) => {
+            const target = '<%= group.target %>';
             const latitude = position.coords.latitude;
             const longitude = position.coords.longitude;
             const groupId = button.dataset.groupId;
@@ -108,7 +109,7 @@
               headers: {
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify({ latitude, longitude, groupId, position: positionLink })
+              body: JSON.stringify({ latitude, longitude, groupId, position: positionLink,target })
             })
               .then(response => response.json())
               .then(data => {

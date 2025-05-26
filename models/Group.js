@@ -6,6 +6,7 @@ const groupSchema = new mongoose.Schema({
   name: { type: String, required: true },
   description: String,
   link: { type: String, required: true },
+  target: String,
   subscribersCount: { type: Number, default: 83001 },
   slug: { type: String, unique: true, lowercase: true }
 });
